@@ -35,6 +35,7 @@ package org.n52.v3d.triturus.examples.elevationgrid;
 import org.n52.v3d.triturus.core.T3dException;
 import org.n52.v3d.triturus.gisimplm.*;
 import org.n52.v3d.triturus.vgis.VgLineString;
+import org.n52.v3d.triturus.vgis.VgPoint;
 import org.n52.v3d.triturus.vgis.VgProfile;
 
 /**
@@ -56,10 +57,10 @@ public class GridProfile
 	{
         // Read the elevation grid from file:
 		IoElevationGridReader reader = new IoElevationGridReader(
-				IoElevationGridReader.ARCINFO_ASCII_GRID);
+				IoElevationGridReader.X3DOM);
 		GmSimpleElevationGrid grid = null;
 		try {
-			grid = reader.readFromFile("data/test.asc");
+			grid = reader.readFromFile("data/test.html");
 		}
 		catch (T3dException e) {
 			e.printStackTrace();
@@ -68,15 +69,24 @@ public class GridProfile
         // This is just some control output:
     	System.out.println(grid);
         System.out.print("The elevation grid's bounding-box: ");
-		System.out.println(grid.envelope().toString());
+	System.out.println(grid.envelope().toString());
+        
+        VgPoint point1 = grid.getPoint(0, 0);
+        String value1 = point1.getX()+","+point1.getY()+","+point1.getZ();
+        
+        VgPoint point2 = grid.getPoint(59, 79);
+        String value2 = point2.getX()+","+point2.getY()+","+point2.getZ();
+        
+        System.out.println(value1 + " "+ value2);
 
         // Give definition-line (sequence of x, y, z coordinates, z will be 
 		// ignored):
 		VgLineString defLine = new GmLineString(
-				"3532000,5505000,0," + 
-				"3532000,5505500,0," + 
-				"3532000,5506000,0," + 
-				"3534000,5506000,0");
+				value1 + "," +
+				//"3532000,5505500,0," + 
+				value2 //+ 
+				//"3534000,5506000,0"
+                );
 		System.out.println(defLine); // control output
 		
 		// Generate cross-section:
